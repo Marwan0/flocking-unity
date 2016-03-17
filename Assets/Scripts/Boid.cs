@@ -12,11 +12,14 @@ public class Boid {
     public Vector2 location;
     public Vector2 velocity;
     Vector2 acceleration;
-    float size; // size of boid
-    float maxforce;    // Maximum steering force
-    float maxspeed;    // Maximum speed
+    float size;        // size of boid
+    float viewSize;    // size of (square) view
+    float maxForce;    // Maximum steering force
+    float maxSpeed;    // Maximum speed
+    Main main;
 
-    public Boid(float x, float y) {
+    public Boid(float x, float y, Main _main) {
+        main = _main;
         acceleration = new Vector2(0, 0);
 
         // This is a new Vector2 method not yet implemented in JS
@@ -27,12 +30,15 @@ public class Boid {
         velocity = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
         location = new Vector2(x,y);
-        size = 10;
-        maxspeed = 2f;
-        maxforce = 0.1f;
     }
 
     public void Update(List<Boid> boids) {
+
+        viewSize = main.areaSize;
+        size = main.cowSize;
+        maxSpeed = main.maxSpeed;
+        maxForce = main.maxForce;
+
         Flock(boids);
         UpdateLocation();
         Borders();
@@ -63,7 +69,7 @@ public class Boid {
         // Update velocity
         velocity += acceleration;
         // Limit speed
-        velocity = Limit(velocity, maxspeed);
+        velocity = Limit(velocity, maxSpeed);
         location += velocity;
         // Reset accelertion to 0 each cycle
         acceleration *= 0;
@@ -75,7 +81,7 @@ public class Boid {
         Vector2 desired = target -location;  // A vector pointing from the location to the target
         // Scale to maximum speed
         desired.Normalize();
-        desired *= maxspeed;
+        desired *= maxSpeed;
 
         // Above two lines of code below could be condensed with new Vector2 setMag() method
         // Not using this method until Processing.js catches up
@@ -83,16 +89,16 @@ public class Boid {
 
         // Steering = Desired minus Velocity
         Vector2 steer = desired - velocity;
-        steer = Limit(steer,maxforce);  // Limit to maximum steering force
+        steer = Limit(steer,maxForce);  // Limit to maximum steering force
         return steer;
     }
 
     // Wraparound
     void Borders() {
-        if (location.x < -size) location.x = Main.viewSize+size;
-        if (location.y < -size) location.y = Main.viewSize+size;
-        if (location.x > Main.viewSize+size) location.x = -size;
-        if (location.y > Main.viewSize+size) location.y = -size;
+        if (location.x < -size) location.x = viewSize+size;
+        if (location.y < -size) location.y = viewSize+size;
+        if (location.x > viewSize+size) location.x = -size;
+        if (location.y > viewSize+size) location.y = -size;
     }
 
     // Separation
@@ -128,9 +134,9 @@ public class Boid {
 
             // Implement Reynolds: Steering = Desired - Velocity
             steer.Normalize();
-            steer *= maxspeed;
+            steer *= maxSpeed;
             steer -= velocity;
-            steer = Limit(steer, maxforce);
+            steer = Limit(steer, maxForce);
         }
         return steer;
     }
@@ -156,9 +162,9 @@ public class Boid {
 
             // Implement Reynolds: Steering = Desired - Velocity
             sum.Normalize();
-            sum *= maxspeed;
+            sum *= maxSpeed;
             Vector2 steer = sum - velocity;
-            steer = Limit(steer,maxforce);
+            steer = Limit(steer,maxForce);
             return steer;
         } 
         else {
