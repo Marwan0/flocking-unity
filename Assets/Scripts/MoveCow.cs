@@ -5,6 +5,7 @@ public class MoveCow : MonoBehaviour {
     
     public float timeOffset = 0;
     public float radius = 50;
+    public float speed = 1;
 
     // Use this for initialization
     void Start () {
@@ -14,7 +15,7 @@ public class MoveCow : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        transform.position = new Vector3( radius*Mathf.Sin(Time.time + timeOffset), 0, radius*Mathf.Cos(Time.time + timeOffset) );
+        transform.position = new Vector3( radius*Mathf.Sin((Time.time + timeOffset)*speed), 0, radius*Mathf.Cos((Time.time + timeOffset)*speed) );
 
     }
 }

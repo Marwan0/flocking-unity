@@ -11,7 +11,8 @@ public class Main : MonoBehaviour {
         for ( int i = 0; i < numberOfCows; i++ ) {
             var cow = Instantiate(Resources.Load("cow")) as GameObject;
             cow.GetComponent<MoveCow>().timeOffset = Random.Range(-10,10);
-            cow.GetComponent<MoveCow>().radius     = Random.Range(10,100);
+            cow.GetComponent<MoveCow>().radius     = Random.Range(10,50);
+            cow.GetComponent<MoveCow>().speed      = Random.Range(-3.0f,3.0f);
         }
 	}
 	
