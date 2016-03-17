@@ -109,14 +109,13 @@ public class Boid {
         int count = 0;
         // For every boid in the system, check if it's too close
         foreach (var other in boids) {
-            float d = Vector2.Distance(location, other.location);
+            //            if ( other == this ) continue;
+            Vector2 diff = location - other.location;
+            float d = Vector2.SqrMagnitude(diff);
             // If the distance is greater than 0 and less than an arbitrary amount (0 when you are yourself)
-            if ((d > 0) && (d < desiredseparation)) {
+            if (d > 0 && d < desiredseparation*desiredseparation) {
                 // Calculate vector pointing away from neighbor
-                Vector2 diff = location - other.location;
-                diff.Normalize();
-//                diff.Scale(new Vector2(d,d));        // Weight by distance
-                diff *= d;        // Weight by distance
+                diff /= d;        // Weight by distance
                 steer += diff;
                 count++;            // Keep track of how many
             }
