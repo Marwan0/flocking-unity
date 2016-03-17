@@ -14,7 +14,7 @@ public class Main : MonoBehaviour {
     public float alignmentWeight = 1;
     public float cohesionWeight = 1;
 
-    public Camera camera;
+    public Camera cam;
 
     Flock flock;
 
@@ -29,8 +29,8 @@ public class Main : MonoBehaviour {
             flock.AddBoid(cow);
         }
 
-        camera.orthographicSize = areaSize/2;
-        camera.transform.position = new Vector3 ( areaSize/2, 100, areaSize/2 );
+        cam.orthographicSize = areaSize/2;
+        cam.transform.position = new Vector3 ( areaSize/2, 100, areaSize/2 );
 
 	}
 	
