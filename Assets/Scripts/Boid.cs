@@ -16,6 +16,9 @@ public class Boid {
     float viewSize;    // size of (square) view
     float maxForce;    // Maximum steering force
     float maxSpeed;    // Maximum speed
+    float separationWeight;
+    float alignmentWeight;
+    float cohesionWeight;
     Main main;
 
     public Boid(float x, float y, Main _main) {
@@ -38,6 +41,9 @@ public class Boid {
         size = main.cowSize;
         maxSpeed = main.maxSpeed;
         maxForce = main.maxForce;
+        separationWeight = main.separationWeight;
+        alignmentWeight = main.alignmentWeight;
+        cohesionWeight = main.cohesionWeight;
 
         Flock(boids);
         UpdateLocation();
@@ -51,17 +57,17 @@ public class Boid {
 
     // We accumulate a new acceleration each time based on three rules
     void Flock(List<Boid> boids) {
-        Vector2 sep = Separate(boids);   // Separation
-        Vector2 ali = Align(boids);      // Alignment
-        Vector2 coh = Cohesion(boids);   // Cohesion
+        Vector2 separationForce = Separate(boids);   // Separation
+        Vector2 alignmentForce  = Align(boids);      // Alignment
+        Vector2 cohesionForce   = Cohesion(boids);   // Cohesion
         // Arbitrarily weight these forces
-        sep *= 2.5f;
-        ali *= 1;
-        coh *= 1;
+        separationForce *= separationWeight;
+        alignmentForce *= alignmentWeight;
+        cohesionForce *= cohesionWeight;
         // Add the force vectors to acceleration
-        ApplyForce(sep);
-        ApplyForce(ali);
-        ApplyForce(coh);
+        ApplyForce(separationForce);
+        ApplyForce(alignmentForce);
+        ApplyForce(cohesionForce);
     }
 
     // Method to update location
